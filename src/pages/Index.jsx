@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import TinderCard from 'react-tinder-card';
-import { Button } from "@/components/ui/button"
-import { Heart, X } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Heart, X } from "lucide-react";
 
 const babyNames = [
   "Olivia", "Liam", "Emma", "Noah", "Ava", "Elijah", "Charlotte", "William", "Sophia", "James",
@@ -10,9 +10,11 @@ const babyNames = [
 
 const Index = () => {
   const [currentIndex, setCurrentIndex] = useState(babyNames.length - 1);
+  const [lastDirection, setLastDirection] = useState();
 
   const swiped = (direction, nameToDelete, index) => {
     console.log('removing: ' + nameToDelete + ' to the ' + direction);
+    setLastDirection(direction);
     setCurrentIndex(index - 1);
   }
 
@@ -29,9 +31,9 @@ const Index = () => {
             key={name}
             onSwipe={(dir) => swiped(dir, name, index)}
             onCardLeftScreen={() => outOfFrame(name)}
-            className="absolute"
+            preventSwipe={['up', 'down']}
           >
-            <div className="bg-white rounded-lg shadow-md w-80 h-80 flex items-center justify-center border-4 border-blue-200">
+            <div className="absolute bg-white rounded-lg shadow-md w-80 h-80 flex items-center justify-center border-4 border-blue-200">
               <h2 className="text-3xl font-semibold text-blue-500">{name}</h2>
             </div>
           </TinderCard>
@@ -55,6 +57,9 @@ const Index = () => {
           <Heart className="h-6 w-6 text-green-500" />
         </Button>
       </div>
+      {lastDirection && (
+        <h2 className="mt-4 text-xl">You swiped {lastDirection}</h2>
+      )}
     </div>
   );
 };
